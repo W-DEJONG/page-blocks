@@ -1,0 +1,8 @@
+./idea
+/examples export-ignore
+/tests export-ignore
+/workbench export-ignore
+/.* export-ignore
+/phpunit.xml export-ignore
+/phpstan* export-ignore
+/testbench.* export-ignore

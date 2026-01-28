@@ -1,0 +1,35 @@
+{
+    "name": "dejodev/page-blocks",
+    "description": "Simple page blocks blocks package for Filament",
+    "type": "library",
+    "keywords": [
+        "Laravel",
+        "Filament"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Wouter de Jong",
+            "email": "wj@dejo.dev"
+        }
+    ],
+    "require": {
+        "php": "^8.4",
+        "filament/filament": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "DejoDev\\PageBlocks\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "DejoDev\\PageBlocks\\PageBlocksServiceProvider"
+            ],
+            "aliases": {
+                "PageBlocks": "DejoDev\\PageBlocks\\Facade"
+            }
+        }
+    }
+}
