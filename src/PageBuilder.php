@@ -2,6 +2,7 @@
 
 namespace DejoDev\PageBlocks;
 
+use DejoDev\PageBlocks\Enums\BlockPickerStyle;
 use Filament\Forms\Components\Builder;
 use Filament\Forms\Components\Builder\Block;
 use Illuminate\Support\Arr;
@@ -9,6 +10,13 @@ use Illuminate\Support\Str;
 
 class PageBuilder extends Builder
 {
+    /**
+     * @var view-string
+     */
+    protected string $view = 'page-blocks::components.page-builder';
+
+    protected BlockPickerStyle $blockPickerStyle = BlockPickerStyle::Dropdown;
+
     protected ?string $blockGroup = null {
         get {
             return $this->blockGroup;
@@ -23,6 +31,8 @@ class PageBuilder extends Builder
 
     protected function setUp(): void
     {
+        $this->applyConfiguredBlockPickerStyle();
+
         parent::setUp();
 
         $this->afterStateHydrated(static function (Builder $component, ?array $rawState): void {
@@ -85,5 +95,40 @@ class PageBuilder extends Builder
         $this->sortByLabel = $sort;
 
         return $this;
+    }
+
+    public function blockPickerStyle(BlockPickerStyle|string $style): static
+    {
+        if (is_string($style)) {
+            $style = BlockPickerStyle::from($style);
+        }
+
+        if ($style === BlockPickerStyle::Modal) {
+            $this->blockPickerColumns(3);
+        }
+
+        $this->blockPickerStyle = $style;
+
+        return $this;
+    }
+
+    public function getBlockPickerStyle(): BlockPickerStyle
+    {
+        return $this->blockPickerStyle;
+    }
+
+    protected function applyConfiguredBlockPickerStyle(): void
+    {
+        $style = config('page-blocks.block_picker_style');
+
+        if ($style instanceof BlockPickerStyle) {
+            $this->blockPickerStyle($style);
+
+            return;
+        }
+
+        if (is_string($style) && BlockPickerStyle::tryFrom($style)) {
+            $this->blockPickerStyle(BlockPickerStyle::from($style));
+        }
     }
 }
