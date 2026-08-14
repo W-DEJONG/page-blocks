@@ -11,4 +11,10 @@ return [
             'namespace' => env('PAGEBLOCKS_NAMESPACE', 'App\PageBlocks'),
         ],
     ],
+
+    /*
+     * Default block picker style: `dropdown` or `modal`.
+     * Can be overridden per field with PageBuilder::blockPickerStyle().
+     */
+    'block_picker_style' => 'dropdown',
 ];

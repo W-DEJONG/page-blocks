@@ -2,8 +2,8 @@
 
 namespace DejoDev\PageBlocks;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\ServiceProvider;
 
 class PageBlocksServiceProvider extends ServiceProvider
 {
@@ -12,7 +12,7 @@ class PageBlocksServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        if (!app()->environment('testing')) {
+        if (! app()->environment('testing')) {
             $this->app->singleton(PageBlocksManager::class);
         }
     }
@@ -23,12 +23,12 @@ class PageBlocksServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->publishes([
-            __DIR__ . '/../config/page-blocks.php' => config_path('page-blocks.php'),
-            __DIR__ . '/../resources/views' => resource_path('views/vendor/page-blocks'),
+            __DIR__.'/../config/page-blocks.php' => config_path('page-blocks.php'),
+            __DIR__.'/../resources/views' => resource_path('views/vendor/page-blocks'),
         ], 'page-blocks');
 
-        $this->mergeConfigFrom(__DIR__ . '/../config/page-blocks.php', 'page-blocks');
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'page-blocks');
+        $this->mergeConfigFrom(__DIR__.'/../config/page-blocks.php', 'page-blocks');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'page-blocks');
 
         Blade::component('page-blocks::components.blocks', 'page-blocks::blocks');
     }
