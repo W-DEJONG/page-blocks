@@ -4,6 +4,8 @@
     'afterItem' => null,
     'blocks',
     'columns' => null,
+    'iconHeight' => '2rem',
+    'iconWidth' => '2rem',
     'key',
     'style',
     'trigger',
@@ -17,6 +19,8 @@
         :after-item="$afterItem"
         :blocks="$blocks"
         :columns="$columns"
+        :icon-height="$iconHeight"
+        :icon-width="$iconWidth"
         :key="$key"
         :width="$width"
         :attributes="$attributes"

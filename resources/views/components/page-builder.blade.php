@@ -9,6 +9,8 @@
     $blockPickerColumns = $getBlockPickerColumns();
     $blockPickerStyle = $getBlockPickerStyle();
     $blockPickerWidth = $getBlockPickerWidth();
+    $iconWidth = $getIconWidth();
+    $iconHeight = $getIconHeight();
     $hasBlockPreviews = $hasBlockPreviews();
     $hasInteractiveBlockPreviews = $hasInteractiveBlockPreviews();
 
@@ -378,6 +380,8 @@
                                             :after-item="$itemKey"
                                             :columns="$blockPickerColumns"
                                             :blocks="$blockPickerBlocks"
+                                            :icon-height="$iconHeight"
+                                            :icon-width="$iconWidth"
                                             :key="$key"
                                             :style="$blockPickerStyle"
                                             :width="$blockPickerWidth"
@@ -409,6 +413,8 @@
                 :action-alignment="$addActionAlignment"
                 :blocks="$blockPickerBlocks"
                 :columns="$blockPickerColumns"
+                :icon-height="$iconHeight"
+                :icon-width="$iconWidth"
                 :key="$key"
                 :style="$blockPickerStyle"
                 :width="$blockPickerWidth"

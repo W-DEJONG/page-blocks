@@ -11,6 +11,8 @@
     'afterItem' => null,
     'blocks',
     'columns' => null,
+    'iconHeight' => '2rem',
+    'iconWidth' => '2rem',
     'key',
     'trigger',
     'width' => null,
@@ -18,6 +20,10 @@
 
 @once
     <style>
+        .fi-fo-builder-block-picker-modal-items {
+            gap: 0.5rem;
+        }
+
         .fi-fo-builder-block-picker-modal-item {
             display: flex;
             flex-direction: column;
@@ -27,7 +33,7 @@
             gap: 1rem;
             padding: 0.5rem;
             border-radius: 0.375rem;
-            border: 1px solid color-mix(in oklab, var(--gray-950) 10%, transparent);
+            border: 1px solid color-mix(in oklab, var(--gray-950) 5%, transparent);
             background: transparent;
             cursor: pointer;
             white-space: nowrap;
@@ -51,8 +57,8 @@
         }
 
         .fi-fo-builder-block-picker-modal-item-icon {
-            width: 2rem;
-            height: 2rem;
+            width: var(--pb-icon-width, 2rem);
+            height: var(--pb-icon-height, 2rem);
             color: var(--gray-400);
         }
 
@@ -85,7 +91,7 @@
     </x-slot>
 
     <div
-        {{ (new ComponentAttributeBag)->grid($columns, GridDirection::Row) }}
+        {{ (new ComponentAttributeBag)->grid($columns, GridDirection::Row)->class(['fi-fo-builder-block-picker-modal-items']) }}
     >
         @foreach ($blocks as $block)
             @php
@@ -109,7 +115,12 @@
                 wire:click="{{ $wireClickAction }}"
             >
                 @if (filled($blockIcon))
-                    {{ \Filament\Support\generate_icon_html($blockIcon, size: IconSize::TwoExtraLarge, attributes: (new ComponentAttributeBag)->class(['fi-fo-builder-block-picker-modal-item-icon'])) }}
+                    {{ \Filament\Support\generate_icon_html($blockIcon, size: IconSize::TwoExtraLarge, attributes: (new ComponentAttributeBag)->class(['fi-fo-builder-block-picker-modal-item-icon'])->style([
+                        '--pb-icon-width: ' . $iconWidth,
+                        '--pb-icon-height: ' . $iconHeight,
+                        'width: ' . $iconWidth,
+                        'height: ' . $iconHeight,
+                    ])) }}
                 @endif
 
                 <span>

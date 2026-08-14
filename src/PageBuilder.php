@@ -2,6 +2,7 @@
 
 namespace DejoDev\PageBlocks;
 
+use Closure;
 use DejoDev\PageBlocks\Enums\BlockPickerStyle;
 use Filament\Forms\Components\Builder;
 use Filament\Forms\Components\Builder\Block;
@@ -16,6 +17,10 @@ class PageBuilder extends Builder
     protected string $view = 'page-blocks::components.page-builder';
 
     protected BlockPickerStyle $blockPickerStyle = BlockPickerStyle::Dropdown;
+
+    protected string|Closure|null $iconWidth = null;
+
+    protected string|Closure|null $iconHeight = null;
 
     protected ?string $blockGroup = null {
         get {
@@ -115,6 +120,30 @@ class PageBuilder extends Builder
     public function getBlockPickerStyle(): BlockPickerStyle
     {
         return $this->blockPickerStyle;
+    }
+
+    public function iconWidth(string|Closure|null $width): static
+    {
+        $this->iconWidth = $width;
+
+        return $this;
+    }
+
+    public function getIconWidth(): string
+    {
+        return $this->evaluate($this->iconWidth) ?? '2rem';
+    }
+
+    public function iconHeight(string|Closure|null $height): static
+    {
+        $this->iconHeight = $height;
+
+        return $this;
+    }
+
+    public function getIconHeight(): string
+    {
+        return $this->evaluate($this->iconHeight) ?? '2rem';
     }
 
     protected function applyConfiguredBlockPickerStyle(): void
