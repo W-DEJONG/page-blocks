@@ -30,13 +30,13 @@
             align-items: center;
             justify-content: center;
             width: 100%;
+            min-width: 0;
             gap: 1rem;
             padding: 0.5rem;
             border-radius: 0.375rem;
             border: 1px solid color-mix(in oklab, var(--gray-950) 5%, transparent);
             background: transparent;
             cursor: pointer;
-            white-space: nowrap;
             font-size: 0.875rem;
             outline: none;
             transition: background-color 75ms;
@@ -54,6 +54,12 @@
         .dark .fi-fo-builder-block-picker-modal-item:hover,
         .dark .fi-fo-builder-block-picker-modal-item:focus-visible {
             background-color: color-mix(in oklab, var(--white) 5%, transparent);
+        }
+
+        .fi-fo-builder-block-picker-modal-item > span {
+            width: 100%;
+            text-align: center;
+            overflow-wrap: anywhere;
         }
 
         .fi-fo-builder-block-picker-modal-item-icon {
