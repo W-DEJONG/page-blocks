@@ -42,8 +42,6 @@
                 {{ \Filament\Support\generate_icon_html($blockIcon, size: IconSize::TwoExtraLarge, attributes: (new ComponentAttributeBag)->class(['fi-fo-builder-block-picker-modal-item-icon'])->style([
                     '--pb-icon-width: ' . $iconWidth,
                     '--pb-icon-height: ' . $iconHeight,
-                    'width: ' . $iconWidth,
-                    'height: ' . $iconHeight,
                 ])) }}
             @endif
 

@@ -30,6 +30,7 @@
             justify-content: center;
             width: 100%;
             min-width: 0;
+            overflow: hidden;
             gap: 1rem;
             padding: 0.5rem;
             border-radius: 0.375rem;
@@ -61,10 +62,23 @@
             overflow-wrap: anywhere;
         }
 
-        .fi-fo-builder-block-picker-modal-item-icon {
+        .fi-fo-builder-block-picker-modal-item-icon.fi-icon {
+            max-width: 100%;
             width: var(--pb-icon-width, 2rem);
             height: var(--pb-icon-height, 2rem);
+            object-fit: contain;
             color: var(--gray-400);
+        }
+
+        img.fi-fo-builder-block-picker-modal-item-icon.fi-icon,
+        .fi-fo-builder-block-picker-modal-item-icon img {
+            display: block;
+            width: auto;
+            height: auto;
+            min-width: 0;
+            max-width: min(100%, var(--pb-icon-width, 2rem));
+            max-height: var(--pb-icon-height, 2rem);
+            object-fit: contain;
         }
 
         .dark .fi-fo-builder-block-picker-modal-item-icon {
