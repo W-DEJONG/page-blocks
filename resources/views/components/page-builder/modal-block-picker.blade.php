@@ -1,7 +1,6 @@
 @php
     use Filament\Support\Enums\Alignment;
-    use Filament\Support\Enums\GridDirection;
-    use Filament\Support\Enums\IconSize;
+    use Illuminate\Contracts\Support\Htmlable;
     use Illuminate\View\ComponentAttributeBag;
 @endphp
 
@@ -71,11 +70,40 @@
         .dark .fi-fo-builder-block-picker-modal-item-icon {
             color: var(--gray-500);
         }
+
+        .fi-fo-builder-block-picker-modal-tabs {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .fi-fo-builder-block-picker-modal-tabs:first-child {
+            margin-top: 0;
+        }
     </style>
 @endonce
 
 @php
     $modalId = 'page-blocks-block-picker-' . $key . '-' . $action->getName() . (filled($afterItem) ? '-' . $afterItem : '');
+
+    $ungroupedBlocks = [];
+    $tabbedBlocks = [];
+
+    foreach ($blocks as $block) {
+        $tabGroup = method_exists($block, 'getTabGroup') ? $block->getTabGroup() : null;
+
+        if (blank($tabGroup)) {
+            $ungroupedBlocks[] = $block;
+
+            continue;
+        }
+
+        $tabKey = $tabGroup instanceof Htmlable ? $tabGroup->toHtml() : (string) $tabGroup;
+        $tabbedBlocks[$tabKey]['label'] ??= $tabGroup;
+        $tabbedBlocks[$tabKey]['blocks'][] = $block;
+    }
+
+    $hasTabs = $tabbedBlocks !== [];
+    $activeTab = array_key_first($tabbedBlocks);
 @endphp
 
 <x-filament::modal
@@ -97,42 +125,47 @@
     </x-slot>
 
     <div
-        {{ (new ComponentAttributeBag)->grid($columns, GridDirection::Row)->class(['fi-fo-builder-block-picker-modal-items']) }}
+        @if ($hasTabs)
+            x-data="{ tab: @js($activeTab) }"
+        @endif
     >
-        @foreach ($blocks as $block)
-            @php
-                $blockIcon = $block->getIcon();
+        @if (count($ungroupedBlocks))
+            <x-page-blocks::page-builder.modal-block-picker-items
+                :action="$action"
+                :after-item="$afterItem"
+                :blocks="$ungroupedBlocks"
+                :columns="$columns"
+                :icon-height="$iconHeight"
+                :icon-width="$iconWidth"
+                :key="$key"
+            />
+        @endif
 
-                $wireClickActionArguments = ['block' => $block->getName()];
+        @if ($hasTabs)
+            <x-filament::tabs class="fi-fo-builder-block-picker-modal-tabs">
+                @foreach ($tabbedBlocks as $tabKey => $tab)
+                    <x-filament::tabs.item
+                        :alpine-active="'tab === ' . \Illuminate\Support\Js::from($tabKey)"
+                        x-on:click="tab = {{ \Illuminate\Support\Js::from($tabKey) }}"
+                    >
+                        {{ $tab['label'] }}
+                    </x-filament::tabs.item>
+                @endforeach
+            </x-filament::tabs>
 
-                if (filled($afterItem)) {
-                    $wireClickActionArguments['afterItem'] = $afterItem;
-                }
-
-                $wireClickActionArguments = \Illuminate\Support\Js::from($wireClickActionArguments);
-
-                $wireClickAction = "mountAction('{$action->getName()}', {$wireClickActionArguments}, { schemaComponent: '{$key}' })";
-            @endphp
-
-            <button
-                type="button"
-                class="fi-fo-builder-block-picker-modal-item"
-                x-on:click="close"
-                wire:click="{{ $wireClickAction }}"
-            >
-                @if (filled($blockIcon))
-                    {{ \Filament\Support\generate_icon_html($blockIcon, size: IconSize::TwoExtraLarge, attributes: (new ComponentAttributeBag)->class(['fi-fo-builder-block-picker-modal-item-icon'])->style([
-                        '--pb-icon-width: ' . $iconWidth,
-                        '--pb-icon-height: ' . $iconHeight,
-                        'width: ' . $iconWidth,
-                        'height: ' . $iconHeight,
-                    ])) }}
-                @endif
-
-                <span>
-                    {{ $block->getLabel() }}
-                </span>
-            </button>
-        @endforeach
+            @foreach ($tabbedBlocks as $tabKey => $tab)
+                <div x-show="tab === {{ \Illuminate\Support\Js::from($tabKey) }}" x-cloak>
+                    <x-page-blocks::page-builder.modal-block-picker-items
+                        :action="$action"
+                        :after-item="$afterItem"
+                        :blocks="$tab['blocks']"
+                        :columns="$columns"
+                        :icon-height="$iconHeight"
+                        :icon-width="$iconWidth"
+                        :key="$key"
+                    />
+                </div>
+            @endforeach
+        @endif
     </div>
 </x-filament::modal>
